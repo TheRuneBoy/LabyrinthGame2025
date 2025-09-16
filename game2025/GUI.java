@@ -1,5 +1,10 @@
 
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +33,9 @@ public class GUI extends Application {
 
 	private Label[][] fields;
 	private TextArea scoreList;
+
+	private BufferedReader inFromServer;
+	private DataOutputStream outToServer;
 	
 	private  String[] board = {    // 20x20
 			"wwwwwwwwwwwwwwwwwwww",
@@ -137,6 +145,19 @@ public class GUI extends Application {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+
+        connectToServer();
+	}
+
+	private void connectToServer() {
+		try {
+			Socket clientSocket = new Socket("localhost", 65000);
+			inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			outToServer = new DataOutputStream(clientSocket.getOutputStream());
+
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public void playerMoved(int delta_x, int delta_y, String direction) {
@@ -145,20 +166,26 @@ public class GUI extends Application {
 
 		if (board[y+delta_y].charAt(x+delta_x)=='w') {
 			me.addPoints(-1);
+			sendAndReceive("POINT " + me.name + " -1 " + "\n");
 		} 
 		else {
 			Player p = getPlayerAt(x+delta_x,y+delta_y);
 			if (p!=null) {
               me.addPoints(10);
-              p.addPoints(-10);
+			  sendAndReceive("POINT " + me.name + " 10 " + "\n");
+			  p.addPoints(-10);
+			  sendAndReceive("POINT " + p.name + " -10 " + "\n");
+
 			} else {
 				me.addPoints(1);
-			
+				sendAndReceive("POINT " + me.name + " 1 " + "\n");
+
+
 				fields[x][y].setGraphic(new ImageView(image_floor));
 				x+=delta_x;
 				y+=delta_y;
 
-				if (direction.equals("right")) {
+                if (direction.equals("right")) {
 					fields[x][y].setGraphic(new ImageView(hero_right));
 				};
 				if (direction.equals("left")) {
@@ -173,9 +200,22 @@ public class GUI extends Application {
 
 				me.setXpos(x);
 				me.setYpos(y);
+
+				sendAndReceive("MOVE " + x + " " + y + " "+ direction + "\n");
 			}
 		}
+		System.out.println();
 		scoreList.setText(getScoreList());
+	}
+
+	private void sendAndReceive(String messageToServer) {
+		try {
+			outToServer.writeBytes(messageToServer);
+			String messageFromServer = inFromServer.readLine();
+			System.out.println("Message from server: " + messageFromServer);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public String getScoreList() {
