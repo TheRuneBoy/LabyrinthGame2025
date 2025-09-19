@@ -3,11 +3,11 @@
     <properties maven-id="org.openjfx:javafx-controls:22" />
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/javafx-controls-22.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/javafx-controls-22-win.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-controls-22-mac-aarch64.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/javafx-graphics-22.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/javafx-graphics-22-win.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-graphics-22-mac-aarch64.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/javafx-base-22.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/javafx-base-22-win.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javafx-base-22-mac-aarch64.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$PROJECT_DIR$/lib/javafx-controls-22-javadoc.jar!/" />
