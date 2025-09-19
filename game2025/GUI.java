@@ -22,11 +22,11 @@ public class GUI extends Application {
 	private static final int size = 20;
 	private static final int scene_height = size * 20 + 100;
 	private static final int scene_width = size * 20 + 200;
-  
+
 	private static Image image_floor;
 	private static Image image_wall;
 	private static Image hero_right,hero_left,hero_up,hero_down;
-
+  
 	private static Player me;
 	private static List<Player> players = new ArrayList<>();
 
@@ -60,7 +60,7 @@ public class GUI extends Application {
 			"wwwwwwwwwwwwwwwwwwww"
 	};
 
-	
+
 	// -------------------------------------------
 	// | Maze: (0,0)              | Score: (1,0) |
 	// |-----------------------------------------|
@@ -78,12 +78,12 @@ public class GUI extends Application {
 
 			Text mazeLabel = new Text("Maze:");
 			mazeLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-	
+
 			Text scoreLabel = new Text("Score:");
 			scoreLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
 			scoreList = new TextArea();
-			
+
 			GridPane boardGrid = new GridPane();
 
 			image_wall  = new Image(getClass().getResourceAsStream("Image/wall4.png"),size,size,false,false);
@@ -98,22 +98,23 @@ public class GUI extends Application {
 			for (int j = 0; j < 20; j++) {
 				for (int i = 0; i < 20; i++) {
 					switch (board[j].charAt(i)) {
-					case 'w':
-						fields[i][j] = new Label("", new ImageView(image_wall));
-						break;
-					case ' ':					
-						fields[i][j] = new Label("", new ImageView(image_floor));
-						break;
-					default: throw new Exception("Illegal field value: " + board[j].charAt(i) );
+						case 'w':
+							fields[i][j] = new Label("", new ImageView(image_wall));
+							break;
+						case ' ':
+							fields[i][j] = new Label("", new ImageView(image_floor));
+							break;
+						default: throw new Exception("Illegal field value: " + board[j].charAt(i));
+
 					}
 					boardGrid.add(fields[i][j], i, j);
 				}
 			}
 			scoreList.setEditable(false);
-			
-			
-			grid.add(mazeLabel,  0, 0); 
-			grid.add(scoreLabel, 1, 0); 
+
+
+			grid.add(mazeLabel,  0, 0);
+			grid.add(scoreLabel, 1, 0);
 			grid.add(boardGrid,  0, 1);
 			grid.add(scoreList,  1, 1);
 
@@ -135,9 +136,9 @@ public class GUI extends Application {
 					throw new RuntimeException(e);
 				}
 			});
-			
-            // Setting up standard players
-			
+
+			// Setting up standard players
+
 			me = new Player("Orville",9,4,"up");
 			players.add(me);
 			fields[9][4].setGraphic(new ImageView(hero_up));
@@ -150,15 +151,16 @@ public class GUI extends Application {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-
-        try {
-            Socket clientSocket = new Socket("localhost", 6000);
+    
+		try {
+			Socket clientSocket = new Socket("localhost", 6000);
 			outToServer = new DataOutputStream(clientSocket.getOutputStream());
 			receiveThread = new ReceiveThread(clientSocket, this);
 			receiveThread.start();
-		} catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+		} 
+    catch (IOException e) {
+		  throw new RuntimeException(e);
+		}
 	}
 
 	public void playerMoved(int delta_x, int delta_y, String direction) {
@@ -172,8 +174,8 @@ public class GUI extends Application {
 		else {
 			Player p = getPlayerAt(x + delta_x,y + delta_y);
 			if (p != null) {
-              me.addPoints(10);
-			  p.addPoints(-10);
+				me.addPoints(10);
+				p.addPoints(-10);
 			} else {
 				me.addPoints(1);
 
@@ -216,6 +218,6 @@ public class GUI extends Application {
 			}
 		}
 		return null;
-	}    
+	}
 }
 
