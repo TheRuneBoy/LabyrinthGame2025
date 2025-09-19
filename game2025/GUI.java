@@ -1,5 +1,4 @@
 
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -9,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -22,7 +22,7 @@ public class GUI extends Application {
 	private static final int size = 20;
 	private static final int scene_height = size * 20 + 100;
 	private static final int scene_width = size * 20 + 200;
-
+  
 	private static Image image_floor;
 	private static Image image_wall;
 	private static Image hero_right,hero_left,hero_up,hero_down;
@@ -216,8 +216,6 @@ public class GUI extends Application {
 			}
 		}
 		return null;
-	}
-
-	
+	}    
 }
 
