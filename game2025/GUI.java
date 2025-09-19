@@ -26,7 +26,7 @@ public class GUI extends Application {
 	private static Image image_floor;
 	private static Image image_wall;
 	private static Image hero_right,hero_left,hero_up,hero_down;
-
+  
 	private static Player me;
 	private static List<Player> players = new ArrayList<>();
 
@@ -104,7 +104,8 @@ public class GUI extends Application {
 						case ' ':
 							fields[i][j] = new Label("", new ImageView(image_floor));
 							break;
-						default: throw new Exception("Illegal field value: " + board[j].charAt(i) );
+						default: throw new Exception("Illegal field value: " + board[j].charAt(i));
+
 					}
 					boardGrid.add(fields[i][j], i, j);
 				}
@@ -150,14 +151,15 @@ public class GUI extends Application {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-
+    
 		try {
 			Socket clientSocket = new Socket("localhost", 6000);
 			outToServer = new DataOutputStream(clientSocket.getOutputStream());
 			receiveThread = new ReceiveThread(clientSocket, this);
 			receiveThread.start();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		} 
+    catch (IOException e) {
+		  throw new RuntimeException(e);
 		}
 	}
 
@@ -181,7 +183,7 @@ public class GUI extends Application {
 				x += delta_x;
 				y += delta_y;
 
-				if (direction.equals("right")) {
+                if (direction.equals("right")) {
 					fields[x][y].setGraphic(new ImageView(hero_right));
 				};
 				if (direction.equals("left")) {
