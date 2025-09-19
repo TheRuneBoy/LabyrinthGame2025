@@ -1,5 +1,6 @@
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.*;
 
 public class GUI extends Application {
+
+	private ClientHandler client;
+	private RecieverThread receiverThread;
 
 	public static final int size = 20; 
 	public static final int scene_height = size * 20 + 100;
@@ -137,6 +141,17 @@ public class GUI extends Application {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		try {
+			client = new ClientHandler("localhost", 12800);
+			System.out.println("Forbundet til serveren");
+
+			receiverThread = new RecieverThread(client.getSocket());
+			receiverThread.start();
+		} catch (IOException e) {
+			System.out.println("Kunne ikke forbinde til serveren");
+			e.printStackTrace();
+		}
+
 	}
 
 	public void playerMoved(int delta_x, int delta_y, String direction) {
@@ -173,6 +188,19 @@ public class GUI extends Application {
 
 				me.setXpos(x);
 				me.setYpos(y);
+
+				if (client != null) {
+					String message = "MOVE:" + me.name + "," + me.getXpos() + "," + me.getYpos() + "," + me.getDirection();
+					try {
+						client.sendMessage(message);
+//						String response = client.readMessage(); // Echo fra server
+//						System.out.println("Server echo: " + response);
+					} catch (IOException e) {
+						System.out.println("Fejl i kommunikation med server");
+						e.printStackTrace();
+					}
+				}
+
 			}
 		}
 		scoreList.setText(getScoreList());
